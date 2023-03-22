@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;500;700;900&display=swap');
+
+:root {
+  --white: #fafafa;
+  --grey: rgb(240, 240, 240);
+  --dark-grey: rgb(200, 200, 200);
+  --black: rgb(30, 30, 30);
+  --gold: #ffbb00;
+}
+
+
+html {
+  -webkit-tap-highlight-color:transparent;
+  font-family: Nunito;
+  color: var(--black);
+
+}
+
+.tc {
+  text-align: center;
+}
+
+body {
+  margin: 0;
+
+  background-color: var(--white);
+}
+
+#app {
+  height: inherit;
+
+}
+
+p {
+  margin: 0;
+  font-size: .8em;
+}
+
+.progress {
+  animation: progress-anim 1s ease;
+}
+@keyframes progress-anim {
+  from { width: 0}
+}
+
+#navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: fixed;
+  color: rgb(200, 200, 200);
+  height: 60px;
+  width: 100%;
+  bottom: 0;
+  background-color: var(--white);
+
+}
+
+#navbar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.05)
+}
+
+
+#navbar> * {
+  font-size: 1.2em;
+
+
+}
+
+.content {
+  gap: 16px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: minmax(0,1fr);
+
+}
+
+
+
+.card {
+  background-color: var(--white);
+  position: relative;
+  padding: 16px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+}
+
+.chart-period {
+  display: flex;
+  justify-content: space-evenly;
+  /* background-color: var(--grey);
+  padding: 8px;
+  border-radius: 10px; */
+
+}
+
+.chart-period > p {
+  display: grid;
+  place-items: center;
+
+  width: 25px;
+  text-align: center;
+  height: 25px;
+  border-radius: 100%;
+  font-size: .6em;
+}
+
+.chart-period > p.selected {
+  display: grid;
+  place-items: center;
+  background-color: var(--black);
+  color: white;
+  width: 25px;
+  text-align: center;
+  height: 25px;
+  border-radius: 100%;
+  font-size: .6em;
+}
+
+
+
+.chart-header {
+  align-self: center;
+  text-align: center;
+  font-weight: 200px;
+}
+
+.chart-header > h4 {
+  align-self: center;
+  text-align: center;
+  font-weight: 500;
+  font-size: 1.5em;
+}
+
+#chart {
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+
+}
+
+.content .row > * {
+  flex: 1;
+}
+
+.selected {
+  color: var(--black)
+}
+
+.card::before {
+
+  border-radius: 10px;
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.05)
+}
+
+.progress-group {
+  width: 100%;
+  padding: 0;
+  display: flex;
+  place-items: center;
+  gap: 16px;
+
+}
+
+.progress {
+  background-color: rgb(171, 119, 244);
+  width: 60%;
+  height: 10px;
+  border-radius: 5px;
+
+}
+
+.gold {
+  color: var(--gold);
+}
+
+.card-icon {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  color: var(--gold)
+}
+
+.chart-header {
+  color: var(--black)
+}
+
+.red {
+  color: rgb(224, 44, 44);
+}
+
+h4 {
+  align-self: center;
+  font-size: 2em;
+  margin: 0;
+  font-weight: 700;
+  color: var(--black);
+}
+
+h5 {
+  font-size: 1em;
+  font-weight: 500;
+  margin: 0;
+  align-self: center;
+}
+
+.card-list {
+  gap: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.green {
+  color: rgb(56, 208, 112);
+}
+
+.grey {
+  color: var(--grey)
+}
+
+.dark-grey {
+  color: var(--dark-grey)
+}
+
+.blue {
+  color: rgb(72, 167, 218);
+}
+
+a {
+  color: var(--dark-grey)
+}
+
+.progress-bar {
+  height: 10px;
+  flex: 1;
+  background-color: var(--grey);
+  border-radius: 5px;
+  position: relative;
+}
