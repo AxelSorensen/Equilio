@@ -8,9 +8,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
-import { faTrophy, faHouse, faHeartPulse, faBagShopping, faDollarSign, faBicycle, faPlus, faCoins, faXmark, faUtensils, faCartShopping, faGift, faQuestion } from '@fortawesome/free-solid-svg-icons'
+import { faTrophy, faHouse, faHeartPulse, faBagShopping, faDollarSign, faBicycle, faPlus, faCoins, faXmark, faUtensils, faCartShopping, faGift, faQuestion, faWineGlass } from '@fortawesome/free-solid-svg-icons'
 
 /* add icons to the library */
-library.add(faTrophy,faHouse,faHeartPulse,faBagShopping, faDollarSign, faBicycle, faPlus, faCoins, faXmark, faUtensils, faCartShopping, faGift, faQuestion)
+library.add(faTrophy,faHouse,faHeartPulse,faBagShopping, faDollarSign, faBicycle, faPlus, faCoins, faXmark, faUtensils, faCartShopping, faGift, faQuestion, faWineGlass)
 
 createApp(App).use(MotionPlugin).component('font-awesome-icon', FontAwesomeIcon).mount('#app')

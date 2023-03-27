@@ -29,7 +29,7 @@ export default {
       mounted: false,
       fetched: false,
       period: '1W',
-      categories: [{ category: 'Shopping', icon: 'fa-cart-shopping' }, { category: 'Restaurant', icon: 'fa-utensils' }, { category: 'Gift', icon: 'fa-gift' }, { category: 'Other', icon: 'fa-question' }],
+      categories: [{ category: 'Shopping', icon: 'fa-cart-shopping' }, { category: 'Takeaway', icon: 'fa-utensils' }, { category: 'Party', icon: 'fa-wine-glass' }, { category: 'Other', icon: 'fa-question' }],
       periods: [{ text: '1W', days: 7 }, { text: '1M', days: 30 }, { text: '1Y', days: 365 }, { text: 'ALL', days: 0 }]
     }
   },
@@ -54,14 +54,37 @@ export default {
       this.modalOpen = !this.modalOpen;
       this.post_data = { deliveries: null, distance: null, earnings: null, cost: null, category: 'Shopping', date: new Date(Date.now()).toISOString().split('T')[0] }
     },
-    addIncome() {
-      this.post('income', { deliveries: this.post_data.deliveries, distance: this.post_data.distance, earnings: this.post_data.earnings })
+    async addIncome() {
+      this.post('income', { date: this.post_data.date, deliveries: this.post_data.deliveries, distance: this.post_data.distance, earnings: this.post_data.earnings })
       this.closeModal()
+      this.fetched = false;
+      
+      let days = this.periods.find(obj => obj.text == this.period).days
+      if(days == 0) {
+        this.labels = this.calcAllLabels(days).reverse()
+      } else {
+        this.labels = this.calcLabels(days)
+      }
+      this.data = await this.calcBalance(this.labels);
+      this.transactions = await fetchTransactions(days);
+      this.fetched = true;
+
 
     },
-    addExpense() {
-      this.post('expense', { cost: this.post_data.cost, category: this.post_data.category })
+    async addExpense() {
+      this.post('expense', { date: this.post_data.date, cost: this.post_data.cost, category: this.post_data.category })
       this.closeModal()
+      this.fetched = false;
+      
+      let days = this.periods.find(obj => obj.text == this.period).days
+      if(days == 0) {
+        this.labels = this.calcAllLabels(days).reverse()
+      } else {
+        this.labels = this.calcLabels(days)
+      }
+      this.data = await this.calcBalance(this.labels);
+      this.transactions = await fetchTransactions(days);
+      this.fetched = true;
 
     }
   },
@@ -169,7 +192,7 @@ export default {
     <div id="chart" class="card">
       <div class="chart-header">
         <h5>Balance <font-awesome-icon icon="fa-solid fa-dollar-sign" class="black" /></h5>
-        <h4 v-if="fetched" class="green" id="num">{{ balance }} DKK</h4>
+        <h4 v-if="fetched" :class="{'green': balance > 0, 'red': balance < 0}" id="num">{{ balance }} DKK</h4>
         <BeatLoader v-else class="loader" color="#38d070" size="8px" style="height: 2em;"/>
       </div>
       <LineChart v-if="fetched" :data="data.slice(-days).map(item => item.balance)"
@@ -188,7 +211,7 @@ export default {
         <div v-for="transaction in transactions?.slice().reverse()" class="list-item">
           <p>{{ transaction.category || 'Income' }}</p>
           <p class="dark-grey">{{ transaction.date?.slice(0,10) }}</p>
-          <p :class="{'red': transaction.cost, 'green':transaction.earnings}">{{ transaction.cost || transaction.earnings }} DKK</p>
+          <p :class="{'red': transaction.cost, 'green':transaction.earnings}">{{transaction.cost || transaction.earnings }} DKK</p>
         </div>
       </div>
       <div v-else class="loading">
@@ -219,9 +242,18 @@ export default {
   height: 30px;
 
   padding: 16px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 100px 1fr 100px;
   justify-content: space-between;
   align-items: center;
+}
+
+.list-item > *:nth-child(3) {
+  text-align: right;
+}
+
+.list-item > *:nth-child(2) {
+  text-align: center;
 }
 
 .list {
