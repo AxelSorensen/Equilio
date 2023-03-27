@@ -118,7 +118,8 @@ export default {
     <div id="chart" class="card">
       <div class="chart-header">
         <h5>Kilometers <font-awesome-icon icon="fa-solid fa-bicycle" class="" /></h5>
-        <h4 class="blue">{{ kilometers }} KM</h4>
+        <h4 v-if="fetched" class="blue">{{ kilometers }} KM</h4>
+        <BeatLoader v-else class="loader" color="#48a7da" size="8px" style="height: 2em;"/>
         <!-- <p class="dark-grey">(Average)</p> -->
       </div>
 

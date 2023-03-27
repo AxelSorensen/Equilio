@@ -25,7 +25,7 @@ export default {
       data: null,
       labels: null,
       transactions: [],
-      post_data: { deliveries: null, distance: null, earnings: null, cost: null, category: 'Shopping', date: new Date(Date.now()).toISOString().split('T')[0] },
+      post_data: { deliveries: null, distance: null, earnings: null, cost: null, category: 'Shopping', date: new Date(Date.now()).toISOString()},
       mounted: false,
       fetched: false,
       period: '1W',
@@ -52,7 +52,7 @@ export default {
     },
     closeModal() {
       this.modalOpen = !this.modalOpen;
-      this.post_data = { deliveries: null, distance: null, earnings: null, cost: null, category: 'Shopping', date: new Date(Date.now()).toISOString().split('T')[0] }
+      this.post_data = { deliveries: null, distance: null, earnings: null, cost: null, category: 'Shopping', date: new Date(Date.now()).toISOString()}
     },
     async addIncome() {
       this.post('income', { date: this.post_data.date, deliveries: this.post_data.deliveries, distance: this.post_data.distance, earnings: this.post_data.earnings })
@@ -72,7 +72,7 @@ export default {
 
     },
     async addExpense() {
-      this.post('expense', { date: this.post_data.date, cost: this.post_data.cost, category: this.post_data.category })
+      this.post('expense', { date: Date.now(), cost: this.post_data.cost, category: this.post_data.category })
       this.closeModal()
       this.fetched = false;
       
@@ -139,7 +139,7 @@ export default {
         <div class="row">
           <label for="">Date</label>
           <input class="date" type="date" v-model="post_data
-            .date">
+            .date.split('T')[0]">
         </div>
         <div class="row">
           <label for="">Deliveries</label>
@@ -161,7 +161,7 @@ export default {
         <div class="row">
           <label for="">Date</label>
           <input class="date" type="date" v-model="post_data
-            .date">
+            .date.split('T')[0]">
         </div>
         <div class="row">
           
@@ -193,12 +193,12 @@ export default {
       <div class="chart-header">
         <h5>Balance <font-awesome-icon icon="fa-solid fa-dollar-sign" class="black" /></h5>
         <h4 v-if="fetched" :class="{'green': balance > 0, 'red': balance < 0}" id="num">{{ balance }} DKK</h4>
-        <BeatLoader v-else class="loader" color="#38d070" size="8px" style="height: 2em;"/>
+        <BeatLoader v-else class="loader" color="#c8c8c8" size="8px" style="height: 2em;"/>
       </div>
       <LineChart v-if="fetched" :data="data.slice(-days).map(item => item.balance)"
         :labels="period == 'ALL' ? data.map(item => item.date.slice(5, 10)) : labels.map(item => item.slice(5, 10))" />
       <div v-else class="loading">
-        <ClipLoader color="#38d070" />
+        <ClipLoader color="#c8c8c8" />
       </div>
     </div>
     <div class="chart-period">
@@ -211,7 +211,7 @@ export default {
         <div v-for="transaction in transactions?.slice().reverse()" class="list-item">
           <p>{{ transaction.category || 'Income' }}</p>
           <p class="dark-grey">{{ transaction.date?.slice(0,10) }}</p>
-          <p :class="{'red': transaction.cost, 'green':transaction.earnings}">{{transaction.cost || transaction.earnings }} DKK</p>
+          <p :class="{'red': transaction.cost, 'green':transaction.earnings}">{{-transaction.cost?.toFixed(2) || (transaction.earnings * 0.6).toFixed(2) }} DKK</p>
         </div>
       </div>
       <div v-else class="loading">

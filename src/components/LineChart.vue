@@ -47,7 +47,8 @@ export default {
 
           y: {
 
-            min: -Math.max(Math.max(...this.data, Math.abs(Math.min(...this.data)))) - 10,
+            min: -Math.max(Math.max(...this.data, Math.abs(Math.min(...this.data)))) - Math.max(Math.max(...this.data, Math.abs(Math.min(...this.data))))*0.1,
+            max: Math.max(Math.max(...this.data, Math.abs(Math.min(...this.data)))) + Math.max(Math.max(...this.data, Math.abs(Math.min(...this.data))))*0.1,
 
             grid: {
               color: '#dcdcdc',
