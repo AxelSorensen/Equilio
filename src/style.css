@@ -3,15 +3,18 @@
 :root {
   --white: #fafafa;
   --grey: rgb(240, 240, 240);
-  --dark-grey: rgb(200, 200, 200);
+  --dark-grey: #c8c8c8;
   --black: rgb(30, 30, 30);
   --gold: #ffbb00;
 }
 
+* {
+  font-family: Nunito;
+} 
 
 html {
   -webkit-tap-highlight-color:transparent;
-  font-family: Nunito;
+
   color: var(--black);
 
 }
@@ -54,6 +57,19 @@ p {
   bottom: 0;
   background-color: var(--white);
 
+}
+
+.primary {
+  background-color: rgb(161, 51, 225);
+  color: white;
+  border-radius: 5px;
+}
+
+.secondary {
+ 
+  color:rgb(161, 51, 225);
+  border-radius: 5px;
+  border: 3px solid rgb(161, 51, 225);
 }
 
 #navbar::before {
@@ -104,10 +120,10 @@ p {
 
 }
 
-.chart-period > p {
+.chart-period > * {
   display: grid;
   place-items: center;
-
+  cursor: pointer;
   width: 25px;
   text-align: center;
   height: 25px;
@@ -115,7 +131,7 @@ p {
   font-size: .6em;
 }
 
-.chart-period > p.selected {
+.chart-period > *.selected {
   display: grid;
   place-items: center;
   background-color: var(--black);
@@ -152,9 +168,18 @@ p {
 
 }
 
+.column {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  margin-top: 16px;
+}
+
 .content .row > * {
   flex: 1;
 }
+
+
 
 .selected {
   color: var(--black)
@@ -171,6 +196,12 @@ p {
   right: 0;
   z-index: -1;
   box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.05)
+}
+.loading {
+  display: grid;
+  place-content: center;
+  height: 200px;
+
 }
 
 .progress-group {
@@ -230,8 +261,16 @@ h5 {
   flex-direction: column;
 }
 
+.loader {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 .green {
-  color: rgb(56, 208, 112);
+  color: #38d070;
 }
 
 .grey {
@@ -243,7 +282,7 @@ h5 {
 }
 
 .blue {
-  color: rgb(72, 167, 218);
+  color: #48a7da;
 }
 
 a {

@@ -4,53 +4,66 @@ import LineChart from '../components/LineChart.vue'
 import BarChart from '../components/BarChart.vue'
 import { supabase } from '../lib/supabaseClient'
 import '../../src/style.css'
-
-
+import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
+import BeatLoader from 'vue-spinner/src/BeatLoader.vue'
+import { post, fetchData, calcLabels } from '../lib/fetch'
 
 export default {
   components: {
-    LineChart, BarChart
+    LineChart, BarChart, ClipLoader, BeatLoader
   },
   data() {
     return {
+      fetchData: fetchData,
+      calcLabels: calcLabels,
       data: null,
-      labels: [],
+      labels: null,
       mounted: false,
-      chart1period: '1W',
-      chart2period: '1W',
-      periods: ['1D','1W','1M','1Y']
+      fetched: false,
+      period: '1W',
+      periods: [{ text: '1D', days: 1 }, { text: '1W', days: 7 }, { text: '1M', days: 30 }, { text: '1Y', days: 365 }, { text: 'ALL', days: 0 }]
     }
   },
   methods: {
-    changeChart1Period(e) {
-      this.chart1period = e.target.textContent;
-    },
-    changeChart2Period(e) {
-      this.chart2period = e.target.textContent;
-    },
-    async addIncome() {
-      const { data, error } = await supabase
-        .from('Balance')
-        .insert([
-          { amount: 300 },
-        ])
-        this.fetchData()
-    },
-    async fetchData() {
-      supabase.from('Balance').select().then(({ data, error }) => {
-      if (error) {
-        console.log(error)
-        return
-      }
-      this.data = data.map(item => item.amount);
-      this.labels = data.map(item => item.date.slice(5, 10))
-      this.labels.sort(function (a, b) { return new Date(a) - new Date(b) });
-    })
+    changePeriod(text) {
+      this.period = text
+
     }
   },
   async mounted() {
-    this.fetchData()
+    this.labels = this.calcLabels(this.periods[1].days)
+    this.data = await this.fetchData('income', this.periods[1].days, this.labels)
+    this.fetched = true;
     this.mounted = true;
+  },
+  computed: {
+    // a computed getter
+    kilometers() {
+      // `this` points to the component instance
+      return this.data?.reduce((a, b) => a + b.distance, 0).toFixed(2)
+    },
+    deliveries() {
+      // `this` points to the component instance
+      return this.data?.reduce((a, b) => a + b.deliveries, 0)
+    },
+    earnings() {
+      // `this` points to the component instance
+
+      return (this.data?.reduce((a, b) => a + b.earnings, 0) * 0.6).toFixed(2)
+    },
+    calories() {
+      // `this` points to the component instance
+      return this.data?.reduce((a, b) => a + b.distance * 32, 0).toFixed()
+    }
+  },
+  watch: {
+    period: async function (newVal) {
+      this.fetched = false;
+      let days = this.periods.find(obj => obj.text == newVal).days
+      this.labels = this.calcLabels(days)
+      this.data = await this.fetchData('income', days, this.labels)
+      this.fetched = true;
+    }
   }
 }
 </script>
@@ -68,36 +81,52 @@ export default {
         <p>227 / 301</p>
       </div>
     </div>
+
+    <div class="chart-period">
+      <p v-for="item in periods" :class="{ selected: period == item.text }" @click="changePeriod(item.text)">{{ item.text
+      }}
+      </p>
+    </div>
     <div class="row">
       <div class="card">
         <font-awesome-icon icon="fa-solid fa-heart-pulse" class="card-icon red" />
         <p>Calories burned</p>
-        <h4>255</h4>
+        <h4 v-if="fetched">{{ calories }}</h4>
+        <BeatLoader class="loader" v-else color="#c8c8c8" size="8px" />
       </div>
       <div class="card">
         <font-awesome-icon icon="fa-solid fa-bag-shopping" class="card-icon green" />
         <p>Tasks delivered</p>
-        <h4 class="">36</h4>
+        <h4 v-if="fetched" class="">{{ deliveries }}</h4>
+        <BeatLoader class="loader" v-else color="#c8c8c8" size="8px" />
       </div>
     </div>
     <div id="chart" class="card">
       <div class="chart-header">
-        <h5>Balance <font-awesome-icon icon="fa-solid fa-dollar-sign" class="black"/></h5>
-      <h4 class="green" id="num">202.00 DKK</h4>
+        <h5>Earnings <font-awesome-icon icon="fa-solid fa-dollar-sign" class="black" /></h5>
+        <h4 v-if="fetched" class="green" id="num">{{ earnings }} DKK</h4>
+        <BeatLoader v-else class="loader" color="#38d070" size="8px" style="height: 2em;"/>
+        <p class="dark-grey">(After tax)</p>
       </div>
-      <LineChart v-if="mounted" :data="[100,-50,100,30,50,10,100,-50]" :labels="[1,2,3,4,5,6,7,8]"/>
-      <div class="chart-period">
-        <p v-for="period,index in periods" :class="{selected: chart1period == period}" @click="changeChart1Period($event)">{{ period }}</p>
+      <BarChart v-if="fetched" :data="[data.map(item => item.earnings * 0.6), data.map(item => item.earnings * 0.4)]"
+        :labels="period == 'ALL' ? data.map(item => item.date.slice(5, 10)) : labels.map(item => item.slice(5, 10))"
+        color="green" />
+      <div v-else class="loading">
+        <ClipLoader color="#38d070" />
       </div>
     </div>
     <div id="chart" class="card">
       <div class="chart-header">
-        <h5>Kilometers <font-awesome-icon icon="fa-solid fa-bicycle" class=""/></h5>
-      <h4 class="blue">192 KM</h4>
+        <h5>Kilometers <font-awesome-icon icon="fa-solid fa-bicycle" class="" /></h5>
+        <h4 class="blue">{{ kilometers }} KM</h4>
+        <!-- <p class="dark-grey">(Average)</p> -->
       </div>
-      <BarChart v-if="mounted" :data="[100,50,100,30,50,10,100,50]" :labels="[1,2,3,4,5,6,7,8]"/>
-      <div class="chart-period">
-        <p v-for="period,index in periods" :class="{selected: chart2period == period}" @click="changeChart2Period($event)">{{ period }}</p>
+
+      <BarChart v-if="fetched" :data="[data.map(item => item.distance)]"
+        :labels="period == 'ALL' ? data.map(item => item.date.slice(5, 10)) : labels.map(item => item.slice(5, 10))"
+        color="blue" />
+      <div v-else class="loading">
+        <ClipLoader color="#48a7da" />
       </div>
     </div>
   </div>
@@ -105,6 +134,6 @@ export default {
 
 <style scoped>
 .content {
-  grid-template-rows: 100px 100px minmax(0, 1fr)  minmax(0, 1fr) 60px;
+  grid-template-rows: 100px fit-content(1em) 100px minmax(0, 1fr) minmax(0, 1fr) 60px;
 }
 </style>

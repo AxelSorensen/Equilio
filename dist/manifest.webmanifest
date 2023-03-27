@@ -1,1 +1,1 @@
-{"name":"woltapp","short_name":"woltapp","start_url":"/","display":"standalone","background_color":"#ffffff","lang":"en","scope":"/","icons":[{"src":"icons/512.png","sizes":"512x512","type":"image/png"}]}
+{"name":"woltapp","short_name":"woltapp","start_url":"/Equilio/","display":"standalone","background_color":"#ffffff","lang":"en","scope":"/Equilio/","icons":[{"src":"icons/512.png","sizes":"512x512","type":"image/png"}]}

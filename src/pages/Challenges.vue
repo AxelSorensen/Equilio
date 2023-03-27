@@ -29,9 +29,11 @@ export default {
     async fetchData() {
       supabase.from('Balance').select().then(({ data, error }) => {
         if (error) {
+          
           console.log(error)
           return
         }
+
         this.data = data.map(item => item.amount);
         this.labels = data.map(item => item.date.slice(5, 10))
         this.labels.sort(function (a, b) { return new Date(a) - new Date(b) });
@@ -39,7 +41,6 @@ export default {
     }
   },
   async mounted() {
-    this.fetchData()
     this.mounted = true;
   }
 }

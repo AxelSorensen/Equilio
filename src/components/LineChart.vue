@@ -7,7 +7,7 @@
 <script>
 import { Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement, Filler } from 'chart.js'
-import { CHART_COLORS } from './utils'
+import { CHART_COLORS } from '../lib/utils'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, LineElement, PointElement, Filler, Title)
 
@@ -46,12 +46,9 @@ export default {
         scales: {
 
           y: {
-            display: false,
-            min: -Math.max(Math.max(...this.data, Math.abs(Math.min(...this.data)))) - 100,
-            max: Math.max(Math.max(...this.data, Math.abs(Math.min(...this.data)))) + 100,
-            ticks: {
-              display: false
-            },
+
+            min: -Math.max(Math.max(...this.data, Math.abs(Math.min(...this.data)))) - 10,
+
             grid: {
               color: '#dcdcdc',
               lineWidth: 0,
@@ -65,7 +62,7 @@ export default {
             },
             ticks: {
               autoSkip: true,
-              // maxTicksLimit: 7
+              maxTicksLimit: 15
             }
 
           },
@@ -77,8 +74,6 @@ export default {
   computed: {
     chartData() {
       return {
-
-
         labels: this.labels,
         datasets: [{
           backgroundColor: 'black',
@@ -103,4 +98,9 @@ export default {
   }
 }
 </script>
-<style scoped></style>
+<style scoped>
+canvas {
+  height: 200px !important;
+}
+
+</style>
