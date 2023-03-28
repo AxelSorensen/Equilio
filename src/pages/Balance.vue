@@ -72,7 +72,7 @@ export default {
 
     },
     async addExpense() {
-      this.post('expense', { date: Date.now(), cost: this.post_data.cost, category: this.post_data.category })
+      this.post('expense', { date: this.post_data.date, cost: this.post_data.cost, category: this.post_data.category })
       this.closeModal()
       this.fetched = false;
       
@@ -143,17 +143,17 @@ export default {
         </div>
         <div class="row">
           <label for="">Deliveries</label>
-          <input v-model="post_data
+          <input type="number" v-model="post_data
             .deliveries">
         </div>
         <div class="row">
           <label for="">Distance</label>
-          <input v-model="post_data
+          <input type="number" v-model="post_data
             .distance">
         </div>
         <div class="row">
           <label for="">Earnings</label>
-          <input v-model="post_data
+          <input type="number" v-model="post_data
             .earnings">
         </div>
       </div>
@@ -166,7 +166,7 @@ export default {
         <div class="row">
           
           <label for="">Cost</label>
-          <input v-model="post_data
+          <input type="number" v-model="post_data
             .cost">
         </div>
 
