@@ -26,7 +26,6 @@ export default {
       data: null,
       labels: null,
       transactions: [],
-      date: '2021-11-03',
       post_data: { deliveries: null, distance: null, earnings: null, cost: null, category: 'Shopping', date: new Date(Date.now() + 2*60*60*1000).toISOString().split('T')[0]},
       mounted: false,
       fetched: false,
@@ -45,7 +44,6 @@ export default {
 
     },
     openModal(e) {
-      this.millis = Date.now()
       if (e.target.textContent == 'Add income') {
         this.modal = 0;
       } else if (e.target.textContent == 'Add expense') {
@@ -135,7 +133,6 @@ export default {
 
 <template>
   <div v-if="modalOpen" class="modal-overlay" @click.self="closeModal">
-    {{ post_data.date }}
     <div class="modal card">
       <div class="close" @click="closeModal"><font-awesome-icon icon="fa-solid fa-xmark" class="black" /></div>
       <h5 class="tc dark-grey">Metrics</h5>
