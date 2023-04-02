@@ -11,7 +11,7 @@ export const fetchTransactions = async (n) => {
   const expense_data = await fetchAllData('expense');
   let transactions = income_data.concat(expense_data);
   if(n != 0) {
-    transactions = transactions.filter(obj => new Date(obj.date) > new Date(Date.now() - (n - 1) * 24 * 60 * 60 * 1000));
+    transactions = transactions.filter(obj => new Date(obj.date) > new Date(Date.now() + 2*60*60*1000 - (n - 1) * 24 * 60 * 60 * 1000));
   }
   
   transactions.sort(function (a, b) { return new Date(a.date) - new Date(b.date)});
@@ -22,7 +22,7 @@ export const fetchData = async (table, n, labels, padding = true) => {
   let { data, error } = await supabase
     .from(table) //table name
     .select("*") //columns to select from the database
-    .gte('date', `${n == 0 ? new Date('2023-03-01').toISOString() : new Date(Date.now() - (n - 1) * 24 * 60 * 60 * 1000).toISOString()}`).order('date', { ascending: true });
+    .gte('date', `${n == 0 ? new Date('2023-03-01').toISOString() : new Date(Date.now() + 2*60*60*1000 - (n - 1) * 24 * 60 * 60 * 1000).toISOString()}`).order('date', { ascending: true });
   if (error) {
     console.log(error)
     return
@@ -58,7 +58,7 @@ export const fetchAllData = async (table) => {
 export const calcLabels = (n) => {
   let dates = [];
   for (let i = n - 1; i >= 0; i--) {
-    dates.push(new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().slice(0, 10))
+    dates.push(new Date(Date.now() + 2*60*60*1000 - i * 24 * 60 * 60 * 1000).toISOString().slice(0, 10))
   }
   return dates;
 }

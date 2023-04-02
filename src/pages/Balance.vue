@@ -8,6 +8,7 @@ import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 import BeatLoader from 'vue-spinner/src/BeatLoader.vue'
 import { post, fetchData, calcLabels, calcBalance, calcAllLabels, fetchTransactions } from '../lib/fetch'
 
+
 export default {
   components: {
     LineChart, BarChart, ClipLoader, BeatLoader
@@ -25,7 +26,8 @@ export default {
       data: null,
       labels: null,
       transactions: [],
-      post_data: { deliveries: null, distance: null, earnings: null, cost: null, category: 'Shopping', date: new Date(Date.now()).toISOString()},
+      date: '2021-11-03',
+      post_data: { deliveries: null, distance: null, earnings: null, cost: null, category: 'Shopping', date: new Date(Date.now() + 2*60*60*1000).toISOString().split('T')[0]},
       mounted: false,
       fetched: false,
       period: '1W',
@@ -43,6 +45,7 @@ export default {
 
     },
     openModal(e) {
+      this.millis = Date.now()
       if (e.target.textContent == 'Add income') {
         this.modal = 0;
       } else if (e.target.textContent == 'Add expense') {
@@ -52,7 +55,7 @@ export default {
     },
     closeModal() {
       this.modalOpen = !this.modalOpen;
-      this.post_data = { deliveries: null, distance: null, earnings: null, cost: null, category: 'Shopping', date: new Date(Date.now()).toISOString()}
+      this.post_data = { deliveries: null, distance: null, earnings: null, cost: null, category: 'Shopping', date: new Date(Date.now() + 2*60*60*1000).toISOString().split('T')[0]}
     },
     async addIncome() {
       this.post('income', { date: this.post_data.date, deliveries: this.post_data.deliveries, distance: this.post_data.distance, earnings: this.post_data.earnings })
@@ -132,14 +135,14 @@ export default {
 
 <template>
   <div v-if="modalOpen" class="modal-overlay" @click.self="closeModal">
+    {{ post_data.date }}
     <div class="modal card">
       <div class="close" @click="closeModal"><font-awesome-icon icon="fa-solid fa-xmark" class="black" /></div>
       <h5 class="tc dark-grey">Metrics</h5>
       <div v-if="modal == 0" class="inputs">
         <div class="row">
           <label for="">Date</label>
-          <input class="date" type="date" v-model="post_data
-            .date.split('T')[0]">
+          <input class="date" type="date" v-model="post_data.date">
         </div>
         <div class="row">
           <label for="">Deliveries</label>
@@ -161,7 +164,7 @@ export default {
         <div class="row">
           <label for="">Date</label>
           <input class="date" type="date" v-model="post_data
-            .date.split('T')[0]">
+            .date">
         </div>
         <div class="row">
           
