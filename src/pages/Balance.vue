@@ -57,7 +57,6 @@ export default {
     },
     async addIncome() {
       this.post('income', { date: this.post_data.date, deliveries: this.post_data.deliveries, distance: this.post_data.distance, earnings: this.post_data.earnings })
-      this.closeModal()
       this.fetched = false;
       
       let days = this.periods.find(obj => obj.text == this.period).days
@@ -68,13 +67,13 @@ export default {
       }
       this.data = await this.calcBalance(this.labels);
       this.transactions = await fetchTransactions(days);
+      this.closeModal()
       this.fetched = true;
 
 
     },
     async addExpense() {
       this.post('expense', { date: this.post_data.date, cost: this.post_data.cost, category: this.post_data.category })
-      this.closeModal()
       this.fetched = false;
       
       let days = this.periods.find(obj => obj.text == this.period).days
@@ -85,6 +84,7 @@ export default {
       }
       this.data = await this.calcBalance(this.labels);
       this.transactions = await fetchTransactions(days);
+      this.closeModal()
       this.fetched = true;
 
     }

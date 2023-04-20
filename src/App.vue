@@ -34,6 +34,7 @@ export default {
     <a href="#/">
       <font-awesome-icon icon="fa-solid fa-house" :class="{selected: this.currentPath == '#/'}" />
     </a>
+
     <a href="#/balance">
       <font-awesome-icon icon="fa-solid fa-coins" :class="{selected: this.currentPath == '#/balance'}"/>
     </a>
