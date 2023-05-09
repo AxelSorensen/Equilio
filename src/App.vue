@@ -29,7 +29,9 @@ export default {
 </script>
 
 <template>
+  <KeepAlive>
   <component :is="currentView" />
+  </KeepAlive>
   <div id="navbar">
     <a href="#/">
       <font-awesome-icon icon="fa-solid fa-house" :class="{selected: this.currentPath == '#/'}" />
