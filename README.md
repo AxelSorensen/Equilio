@@ -2,6 +2,8 @@
 
 A Vue 3 app for tracking balance/challenges data, with charts backed by Supabase (originally prototyped as "woltapp").
 
+![Equilio screenshot](docs/screenshot.png)
+
 ## Features
 
 - 📈 **Charts** — line and bar chart components (`LineChart.vue`, `BarChart.vue`) built on Chart.js, including a moment.js time adapter
