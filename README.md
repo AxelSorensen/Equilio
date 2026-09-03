@@ -38,3 +38,5 @@ Then open the printed local URL (default Vite port, typically [http://localhost:
 ## Status
 
 🚧 Prototype — the internal package name (`woltapp`) suggests this started as something else and was repurposed; still depends on a live Supabase project to function.
+
+⚠️ Builds cleanly — `npm install && npm run build` verified working as of 2026-09-03 — but requires your own Supabase project URL/key to actually function at runtime (not verified beyond the static build).
